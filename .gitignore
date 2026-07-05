@@ -1,0 +1,9 @@
+node_modules/
+dist/
+src/bin/
+src/obj/
+src/fable_modules/
+src/*.fs.js
+tests/bin/
+tests/obj/
+.DS_Store

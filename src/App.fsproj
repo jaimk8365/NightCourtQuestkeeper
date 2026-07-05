@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>NightCourt</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Domain.fs" />
+    <Compile Include="Catalog.fs" />
+    <Compile Include="Progression.fs" />
+    <Compile Include="QuestEngine.fs" />
+    <Compile Include="RoutineEngine.fs" />
+    <Compile Include="Planner.fs" />
+    <Compile Include="Codec.fs" />
+    <Compile Include="Storage.fs" />
+    <Compile Include="State.fs" />
+    <Compile Include="ViewShared.fs" />
+    <Compile Include="ViewToday.fs" />
+    <Compile Include="ViewWeek.fs" />
+    <Compile Include="ViewRituals.fs" />
+    <Compile Include="ViewStars.fs" />
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fable.Elmish.React" Version="4.0.0" />
+    <PackageReference Include="Feliz" Version="2.7.0" />
+    <PackageReference Include="Thoth.Json" Version="10.2.0" />
+    <PackageReference Include="Fable.Browser.Dom" Version="2.16.0" />
+  </ItemGroup>
+</Project>

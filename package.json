@@ -1,0 +1,22 @@
+{
+  "name": "night-court-questkeeper",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "dotnet fable watch src --run vite",
+    "compile": "dotnet fable src",
+    "build": "dotnet fable src && vite build",
+    "serve": "vite",
+    "preview": "vite preview",
+    "test": "dotnet run --project tests",
+    "deploy": "npm run build && cd dist && git init -q && git checkout -qb gh-pages && git add -A && git commit -qm deploy && git push -f https://github.com/jaimk8365/NightCourtQuestkeeper.git gh-pages && cd .. && rm -rf dist/.git"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
