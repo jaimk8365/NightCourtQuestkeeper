@@ -6,7 +6,33 @@ you by the Night Court — completing them strengthens your powers.
 Built with **F# + Fable 4 + Elmish + Feliz** (MVU architecture), Vite, and
 localStorage persistence, shipped as an installable PWA.
 
-## Running the app
+## 🌐 Use it anywhere
+
+The app is hosted on GitHub Pages:
+
+**https://jaimk8365.github.io/NightCourtQuestkeeper/**
+
+- **iPhone:** open the URL in Safari → Share → *Add to Home Screen*. It launches
+  full-screen with the night theme, and works offline after the first visit to a session.
+- **Any Mac (home or office):** open the URL in any browser; pin or add to Dock via
+  Safari's *Add to Dock* if you like.
+
+Each device keeps its own local data (nothing is stored on GitHub). To carry
+progress between devices, use the **travelling scroll** (copy/paste export) or
+the **cloud bond** (optional sync endpoint) on the Stars page.
+
+### Deploying updates
+
+After changing code on the Mac:
+
+```sh
+export PATH="$HOME/.dotnet:$PATH"
+npm run deploy   # builds and force-pushes dist/ to the gh-pages branch
+```
+
+The site updates a minute or so later.
+
+## Running the app locally
 
 The .NET SDK lives at `~/.dotnet` (not on the default PATH):
 
