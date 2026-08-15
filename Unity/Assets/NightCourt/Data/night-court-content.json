@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "levels": [
+    {"level": 1, "xpToNext": 95, "title": "Cottage Spark", "unlocks": ["world.fae_cottage", "creature.hearth_dragon"]},
+    {"level": 2, "xpToNext": 149, "title": "Glow Tender", "unlocks": ["area.fae_cottage.garden"]},
+    {"level": 3, "xpToNext": 214, "title": "Moonbound Keeper", "unlocks": ["world.moonbinding_hollow", "sigil.momentum"]},
+    {"level": 5, "xpToNext": 368, "title": "Ember Warden", "unlocks": ["world.emberward_grove", "sigil.hearth"]},
+    {"level": 10, "xpToNext": 844, "title": "Mistcaller", "unlocks": ["world.mistcaller_market", "sigil.wayfinder"]},
+    {"level": 13, "xpToNext": 1179, "title": "Starweaver", "unlocks": ["world.starweaver_atelier", "sigil.twin_stars"]},
+    {"level": 16, "xpToNext": 1553, "title": "Dragon Warden", "unlocks": ["world.dragonspire_sanctuary"]},
+    {"level": 20, "xpToNext": 2107, "title": "Warden of the Living Sky", "unlocks": ["world.seasonal_portal"]}
+  ],
+  "worlds": [
+    {
+      "id": "fae_cottage",
+      "name": "Fae Cottage",
+      "unlockLevel": 1,
+      "scene": "FaeCottage",
+      "areas": [
+        {"id": "hearth", "name": "The Hearth", "unlockLevel": 1, "taskTags": ["routine", "reset", "home"], "npcIds": ["elowen"], "nodeIds": ["node_hearth"]},
+        {"id": "closet", "name": "Moonlit Closet", "unlockLevel": 1, "taskTags": ["laundry", "preparation"], "npcIds": [], "nodeIds": ["node_closet"]},
+        {"id": "workbench", "name": "Moonwood Workbench", "unlockLevel": 1, "taskTags": ["project", "craft", "admin"], "npcIds": ["orrin"], "nodeIds": ["node_workbench"]},
+        {"id": "garden", "name": "Glowcap Garden", "unlockLevel": 2, "taskTags": ["habit", "outside", "maintenance"], "npcIds": [], "nodeIds": ["node_garden"]}
+      ]
+    }
+  ],
+  "nodes": [
+    {"id": "node_hearth", "areaId": "hearth", "name": "Wake the Hearth", "type": "Micro", "taskTemplate": "Put away five things", "durationPresets": [5, 10, 20], "reward": {"xp": 12, "coins": 3, "affection": 2}},
+    {"id": "node_closet", "areaId": "closet", "name": "Unsnarl One Thread", "type": "Micro", "taskTemplate": "Start one laundry step", "durationPresets": [5, 10, 20], "reward": {"xp": 15, "coins": 3, "affection": 2}},
+    {"id": "node_workbench", "areaId": "workbench", "name": "Shape One Piece", "type": "Focus", "taskTemplate": "Complete one project step", "durationPresets": [20, 45, 90], "reward": {"xp": 35, "coins": 5, "affection": 3}},
+    {"id": "node_garden", "areaId": "garden", "name": "Tend One Glowcap", "type": "Ritual", "taskTemplate": "Complete one recurring habit", "durationPresets": [5, 10], "reward": {"xp": 10, "coins": 2, "affection": 3}},
+    {"id": "node_dragon", "areaId": "hearth", "name": "Warm the Dragon Nest", "type": "PetCare", "taskTemplate": "Complete one caring responsibility", "durationPresets": [5, 10], "reward": {"xp": 8, "coins": 1, "affection": 8}}
+  ],
+  "creatures": [
+    {"id": "hearth_dragon", "name": "Aster", "species": "Hearth Dragon", "preferredTags": ["home", "routine", "self-care"], "evolutions": [{"stage": 1, "affectionRequired": 0}, {"stage": 2, "affectionRequired": 500}, {"stage": 3, "affectionRequired": 1000}]}
+  ],
+  "items": [
+    {"id": "material.moonwood", "name": "Moonwood", "type": "Material", "rarity": "Common"},
+    {"id": "furniture.glow_shelf", "name": "Glowcap Shelf", "type": "Furniture", "rarity": "Uncommon"}
+  ]
+}

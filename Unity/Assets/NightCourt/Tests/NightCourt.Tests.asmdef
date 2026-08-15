@@ -1,0 +1,8 @@
+{
+  "name": "NightCourt.Tests",
+  "rootNamespace": "NightCourt.Tests",
+  "references": ["NightCourt.Core"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

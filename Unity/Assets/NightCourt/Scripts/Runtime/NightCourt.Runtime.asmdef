@@ -1,0 +1,6 @@
+{
+  "name": "NightCourt.Runtime",
+  "rootNamespace": "NightCourt.Runtime",
+  "references": ["NightCourt.Core"],
+  "autoReferenced": true
+}

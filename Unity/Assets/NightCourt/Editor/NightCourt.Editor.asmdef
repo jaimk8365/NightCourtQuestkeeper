@@ -1,0 +1,7 @@
+{
+  "name": "NightCourt.Editor",
+  "rootNamespace": "NightCourt.Editor",
+  "references": ["NightCourt.Core", "NightCourt.Runtime"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

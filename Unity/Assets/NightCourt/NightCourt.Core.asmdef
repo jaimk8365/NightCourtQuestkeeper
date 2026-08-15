@@ -1,0 +1,7 @@
+{
+  "name": "NightCourt.Core",
+  "rootNamespace": "NightCourt.Core",
+  "references": ["Unity.Newtonsoft.Json"],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}
