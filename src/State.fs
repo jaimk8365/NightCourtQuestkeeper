@@ -101,6 +101,8 @@ type Msg =
     | CloudPulled of Result<AppData, string>
     | SetImportDraft of string
     | ImportData
+    // day rollover
+    | Tick
 
 // ---------------------------------------------------------------- init
 
@@ -354,3 +356,14 @@ let update (msg: Msg) (model: Model) : Model * Cmd<Msg> =
             { model' with ImportDraft = ""; Toast = Some "Scroll unfurled — data restored." }, cmd
         | Error _ ->
             { model with Toast = Some "That scroll could not be read." }, Cmd.none
+
+    // ---------------------------------------------------- day rollover
+    | Tick ->
+        // The PWA can sit open (or merely backgrounded) across midnight, so
+        // `Today` — set once at init — must be refreshed to actually cross
+        // into a new day. Rituals/streaks/"done today" are all keyed off it,
+        // so bumping this is all a reset needs: yesterday's key just stops
+        // matching and everything reads as undone again.
+        let today = Dates.dayKey DateTime.Now
+        if today = model.Today then model, Cmd.none
+        else { model with Today = today }, Cmd.none

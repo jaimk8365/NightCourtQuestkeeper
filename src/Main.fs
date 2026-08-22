@@ -5,8 +5,26 @@ module NightCourt.Main
 open Feliz
 open Elmish
 open Elmish.React
+open Browser.Dom
 open NightCourt.State
 open NightCourt.ViewShared
+
+/// Keeps `Today` honest across midnight even if the PWA is left open (or
+/// merely backgrounded — common on a home-screen icon). Ticks on a timer
+/// and again whenever the tab/app regains focus, since backgrounded timers
+/// can be throttled or paused entirely.
+let private dayRolloverSubscription (_model: Model) : (SubId * Subscribe<Msg>) list =
+    let sub (dispatch: Msg -> unit) =
+        let intervalId = window.setInterval ((fun () -> dispatch Tick), 60_000)
+        let onVisible = fun _ -> dispatch Tick
+        document.addEventListener ("visibilitychange", onVisible)
+        window.addEventListener ("focus", onVisible)
+        { new System.IDisposable with
+            member _.Dispose() =
+                window.clearInterval intervalId
+                document.removeEventListener ("visibilitychange", onVisible)
+                window.removeEventListener ("focus", onVisible) }
+    [ [ "day-rollover" ], sub ]
 
 /// First-run naming ceremony.
 let private onboarding (model: Model) (dispatch: Msg -> unit) =
@@ -77,5 +95,6 @@ let view (model: Model) (dispatch: Msg -> unit) =
     ]
 
 Program.mkProgram init update view
+|> Program.withSubscription dayRolloverSubscription
 |> Program.withReactSynchronous "root"
 |> Program.run
