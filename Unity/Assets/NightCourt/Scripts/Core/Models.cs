@@ -28,6 +28,7 @@ namespace NightCourt.Core
     {
         public string Id { get; set; } = "";
         public string NodeId { get; set; } = "";
+        public string ExternalRef { get; set; } = "";
         public string Title { get; set; } = "";
         public QuestType Type { get; set; }
         public int DurationMinutes { get; set; }
@@ -41,6 +42,16 @@ namespace NightCourt.Core
             Id = id, NodeId = id, Title = title.Trim(), Type = type,
             DurationMinutes = Math.Max(1, minutes), Accepted = true
         };
+    }
+
+    public sealed class LifeHubQuestRecord
+    {
+        public string Id { get; set; } = "";
+        public string Title { get; set; } = "";
+        public string Type { get; set; } = "micro";
+        public int Minutes { get; set; } = 5;
+        public string Realm { get; set; } = "admin";
+        public string CompletedOn { get; set; }
     }
 
     public sealed class CompanionState

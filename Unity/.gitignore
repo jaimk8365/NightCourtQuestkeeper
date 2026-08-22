@@ -10,3 +10,4 @@
 *.sln
 Tests/bin/
 Tests/obj/
+mono_crash.*.json
