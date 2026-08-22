@@ -97,5 +97,51 @@ namespace NightCourt.Tests
             Assert.That(UnityEngine.Object.FindObjectsByType<TaskStation3D>(FindObjectsSortMode.None), Has.Length.EqualTo(3));
             Assert.That(UnityEngine.Object.FindObjectsByType<LifeHubWebBridge>(FindObjectsSortMode.None), Has.Length.EqualTo(1));
         }
+
+        [Test]
+        public void CompletedFocusSessionAwardsOneStarAndFailSoftPartialXp()
+        {
+            var progress = new PlayerProgress();
+            var service = new FocusRewardService(progress);
+            Reward partial = service.Resolve(new FocusResult(.5));
+            Assert.That(partial.Xp, Is.GreaterThan(0));
+            Assert.That(progress.Stars, Is.Zero);
+            Reward complete = service.Resolve(new FocusResult(1));
+            Assert.That(complete.Xp, Is.GreaterThan(partial.Xp));
+            Assert.That(progress.Stars, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void LevelMilestonesUnlockWorldsIntoSaveOnce()
+        {
+            PlayerSave save = PlayerSave.CreateNew();
+            save.Progress.Level = 10;
+            var service = new WorldProgressionService();
+            Assert.That(service.Apply(save), Is.EqualTo(new[] { "moonbinding_hollow", "emberward_grove", "mistcaller_market" }));
+            Assert.That(service.Apply(save), Is.Empty);
+        }
+
+        [Test]
+        public void PersistentCraftingConsumesMaterialsAndBuildsFurnitureInSteps()
+        {
+            PlayerSave save=PlayerSave.CreateNew();
+            save.Inventory.Add(new InventoryEntry{ItemId="material.moonwood",Quantity=3});
+            var recipe=new Recipe{Id="glow_shelf",OutputItemId="furniture.glow_shelf",RequiredSteps=2,Ingredients={new Ingredient{ItemId="material.moonwood",Quantity=3}}};
+            var craft=new PersistentCraftingService(save);
+            Assert.That(craft.Start(recipe),Is.True);
+            Assert.That(craft.Quantity("material.moonwood"),Is.Zero);
+            Assert.That(craft.AddStep(recipe),Is.EqualTo(1));
+            Assert.That(craft.AddStep(recipe),Is.EqualTo(2));
+            Assert.That(craft.Quantity("furniture.glow_shelf"),Is.EqualTo(1));
+        }
+
+        [Test]
+        public void NpcGuideKeepsDialogueShortAndNamesBestNextQuest()
+        {
+            var quests=new[]{QuestState.Open("big","Sort the whole garage",QuestType.Focus,90),QuestState.Open("small","Put away five things",QuestType.Micro,5)};
+            string line=new NpcGuideService().BestNextLine("Elowen",quests,10);
+            Assert.That(line,Does.Contain("Put away five things"));
+            Assert.That(line.Length,Is.LessThanOrEqualTo(100));
+        }
     }
 }

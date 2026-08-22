@@ -57,8 +57,10 @@ namespace NightCourt.Runtime
             LevelUpResult levelUp = Xp.AddXp(reward.Xp);
             Save.Progress.Coins += reward.Coins;
             if (Save.Companions.Count > 0) Companions.AddAffection(Save.Companions[0], reward.Affection);
+            var unlocked = new WorldProgressionService().Apply(Save);
             Persist();
             RewardPresenter.Instance?.Celebrate(reward, levelUp.LevelsGained.Count > 0);
+            if (unlocked.Count > 0) CozyHud.Instance?.Notify("A new world awakened: " + unlocked[0].Replace('_', ' '));
             StateChanged?.Invoke();
         }
 

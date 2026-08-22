@@ -17,11 +17,12 @@ namespace NightCourt.Editor
         {
             Scene scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             RenderSettings.ambientLight=new Color(.46f,.39f,.56f); RenderSettings.fog=true; RenderSettings.fogColor=new Color(.24f,.18f,.32f); RenderSettings.fogDensity=.012f;
-            AddLighting(); AddCottage(); Transform player=AddPlayer(); AddCamera(player); AddDragon(player);
+            AddLighting(); AddCottage(); Transform player=AddPlayer(); AddCamera(player); AddDragon(player);AddCraftingAndHousing();
             AddStation("tiny","Hearth Spark","Choose one tiny win",QuestType.Micro,5,new Reward(15,3,3),new Vector3(-4.7f,.55f,-1.6f),Gold);
             AddStation("focus","Moonlit Desk","Begin a focus quest",QuestType.Focus,25,new Reward(40,7,4),new Vector3(4.8f,.55f,1.9f),Lilac);
             AddStation("care","Glowcap Garden","Tend one gentle ritual",QuestType.Ritual,5,new Reward(12,2,7),new Vector3(3.7f,.55f,-3.7f),Teal);
-            new GameObject("GameServices",typeof(GameBootstrap),typeof(RewardPresenter),typeof(CozyHud));
+            AddPortals(); AddWorlds();
+            new GameObject("GameServices",typeof(GameBootstrap),typeof(RewardPresenter),typeof(CozyHud),typeof(FocusSessionController));
             new GameObject("LifeHubBridge",typeof(LifeHubWebBridge));
             EditorSceneManager.SaveScene(scene,ScenePath); AssetDatabase.SaveAssets(); Debug.Log("Polished 3D Fae Cottage created: "+ScenePath);
         }
@@ -66,6 +67,36 @@ namespace NightCourt.Editor
             Part("Wardrobe",PrimitiveType.Cube,new Vector3(-6.2f,1.35f,-2.5f),new Vector3(1.6f,2.7f,1.2f),new Color(.42f,.23f,.38f));
             for(int i=0;i<4;i++)Part("Book",PrimitiveType.Cube,new Vector3(-6.2f+i*.22f,2.15f,-1.82f),new Vector3(.16f,.6f,.18f),i%2==0?Gold:Teal);
         }
+        private static void AddPortals()
+        {
+            AddPortal("moonbinding_hollow","Moonbinding Hollow",3,new Vector3(-4.6f,1.2f,5.25f),Lilac,new Vector3(28,1,-1));
+            AddPortal("emberward_grove","Emberward Grove",5,new Vector3(0f,1.2f,5.25f),Rose,new Vector3(56,1,-1));
+            AddPortal("mistcaller_market","Mistcaller Market",10,new Vector3(4.6f,1.2f,5.25f),Teal,new Vector3(84,1,-1));
+        }
+        private static void AddWorlds()
+        {
+            AddWorld("Moonbinding Hollow",new Vector3(28,0,0),Lilac,"Elowen",3,"moonbinding_hollow");
+            AddWorld("Emberward Grove",new Vector3(56,0,0),Rose,"Pip",5,"emberward_grove");
+            AddWorld("Mistcaller Market",new Vector3(84,0,0),Teal,"Mira",10,"mistcaller_market");
+            AddWorld("Starweaver Observatory",new Vector3(112,0,0),Gold,"Orin",13,"starweaver_observatory");
+        }
+        private static void AddWorld(string label,Vector3 centre,Color colour,string npcName,int level,string worldId)
+        {
+            Part(label+" Island",PrimitiveType.Cylinder,centre+Vector3.down*.55f,new Vector3(12,.55f,12),Color.Lerp(colour,Cream,.45f));
+            for(int i=0;i<7;i++){float angle=i*Mathf.PI*2f/7f;Vector3 p=centre+new Vector3(Mathf.Cos(angle)*4.8f,.45f,Mathf.Sin(angle)*4.8f);Part(label+" Crystal",PrimitiveType.Capsule,p,new Vector3(.45f,1.2f,.45f),i%2==0?colour:Gold);}
+            Part(label+" Landmark",PrimitiveType.Cylinder,centre+new Vector3(0,1.3f,2.3f),new Vector3(2.1f,1.3f,2.1f),colour);AddLabel(label,centre+new Vector3(0,3.2f,2.3f));
+            GameObject npc=Part(npcName,PrimitiveType.Capsule,centre+new Vector3(-2,.9f,-1),new Vector3(.75f,.9f,.75f),Color.Lerp(colour,Color.white,.3f));npc.AddComponent<NpcGuide3D>().Configure(npcName);AddLabel("Talk to "+npcName,npc.transform.position+Vector3.up*1.35f);
+            AddPortal("fae_cottage","Return to Cottage",1,centre+new Vector3(3,.2f,-2.5f),Cream,new Vector3(0,1,-.4f));
+        }
+        private static void AddCraftingAndHousing()
+        {
+            GameObject bench=Part("Moonwood Crafting Bench",PrimitiveType.Cube,new Vector3(-1.5f,.55f,3.7f),new Vector3(2.4f,1.05f,1.1f),Gold);bench.AddComponent<CraftingStation3D>();AddLabel("Crafting",new Vector3(-1.5f,1.45f,3.7f));
+            GameObject holder=new GameObject("Housing Upgrades",typeof(HousingDisplay));
+            GameObject shelf=Part("Crafted Glowcap Shelf",PrimitiveType.Cube,new Vector3(-6.1f,1.25f,.7f),new Vector3(1.6f,2.4f,.45f),Teal,holder.transform);
+            for(int i=0;i<3;i++){GameObject glow=Part("Shelf Glow",PrimitiveType.Sphere,new Vector3(-.45f+i*.45f,.45f,-.3f),Vector3.one*.22f,i%2==0?Lilac:Gold,shelf.transform);Object.DestroyImmediate(glow.GetComponent<Collider>());}holder.GetComponent<HousingDisplay>().Configure(shelf);
+        }
+        private static void AddPortal(string id,string label,int level,Vector3 position,Color colour,Vector3 destination)
+        {GameObject portal=Part(label+" Portal",PrimitiveType.Cylinder,position,new Vector3(1.35f,.18f,1.35f),colour);portal.AddComponent<WorldPortal3D>().Configure(id,label,level,destination);AddLabel(label+" · Lv"+level,position+Vector3.up*.55f);}
 
         private static Transform AddPlayer()
         {

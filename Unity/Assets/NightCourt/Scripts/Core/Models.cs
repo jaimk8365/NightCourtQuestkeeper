@@ -10,6 +10,7 @@ namespace NightCourt.Core
         public int Level { get; set; } = 1;
         public int CurrentXp { get; set; }
         public int Coins { get; set; }
+        public int Stars { get; set; }
     }
 
     public readonly struct Reward
@@ -67,6 +68,11 @@ namespace NightCourt.Core
         public string ItemId { get; set; } = "";
         public int Quantity { get; set; }
     }
+    public sealed class BuildProgressState
+    {
+        public string RecipeId { get; set; } = "";
+        public int StepsCompleted { get; set; }
+    }
 
     public sealed class PlayerSave
     {
@@ -77,6 +83,8 @@ namespace NightCourt.Core
         public List<QuestState> Quests { get; set; } = new List<QuestState>();
         public List<CompanionState> Companions { get; set; } = new List<CompanionState>();
         public List<InventoryEntry> Inventory { get; set; } = new List<InventoryEntry>();
+        public List<BuildProgressState> Builds { get; set; } = new List<BuildProgressState>();
+        public bool StarterMoonwoodGranted { get; set; }
         public DateTimeOffset SavedUtc { get; set; }
 
         public static PlayerSave CreateNew()
@@ -85,6 +93,8 @@ namespace NightCourt.Core
             save.UnlockedWorlds.Add("fae_cottage");
             save.UnlockedAreas.AddRange(new[] { "hearth", "closet", "workbench" });
             save.Companions.Add(new CompanionState { Id = "hearth_dragon" });
+            save.Inventory.Add(new InventoryEntry { ItemId = "material.moonwood", Quantity = 3 });
+            save.StarterMoonwoodGranted = true;
             return save;
         }
     }

@@ -49,11 +49,20 @@ namespace NightCourt.Core
             save.Progress.Level = Math.Max(1, save.Progress.Level);
             save.Progress.CurrentXp = Math.Max(0, save.Progress.CurrentXp);
             save.Progress.Coins = Math.Max(0, save.Progress.Coins);
+            save.Progress.Stars = Math.Max(0, save.Progress.Stars);
             save.UnlockedWorlds ??= new List<string>();
             save.UnlockedAreas ??= new List<string>();
             save.Quests ??= new List<QuestState>();
             save.Companions ??= new List<CompanionState>();
             save.Inventory ??= new List<InventoryEntry>();
+            save.Builds ??= new List<BuildProgressState>();
+            if (!save.StarterMoonwoodGranted)
+            {
+                InventoryEntry starter = save.Inventory.Find(x => x.ItemId == "material.moonwood");
+                if (starter == null) save.Inventory.Add(new InventoryEntry { ItemId = "material.moonwood", Quantity = 3 });
+                else starter.Quantity += 3;
+                save.StarterMoonwoodGranted = true;
+            }
         }
     }
 }
